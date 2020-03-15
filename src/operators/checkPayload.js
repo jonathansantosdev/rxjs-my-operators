@@ -32,7 +32,7 @@ const checkPayload = (entityDefinition, parse = val => val) => {
       let typeIsOkay = false;
       let notNullIsOkay = false;
       const entityHasValue = !isNullOrUndefined(entity[propertyName]);
-      const errorsProperty = [];
+      const errorsProperty = {};
 
       if (entityHasValue) {
         notNullIsOkay = true;
@@ -54,14 +54,14 @@ const checkPayload = (entityDefinition, parse = val => val) => {
       }
 
       if (!typeIsOkay) {
-        errorsProperty.push({ errorType: "type", errors: types });
+        errorsProperty["type"] = types;
       }
 
       if (!notNullIsOkay) {
-        errorsProperty.push({ errorType: "notNull" });
+        errorsProperty["notNull"] = true;
       }
 
-      if (errorsProperty.length > 0) {
+      if (Object.keys(errorsProperty).length > 0) {
         errors.push(parse({ propertyName, errors: errorsProperty }));
       }
     });
@@ -72,7 +72,6 @@ const checkPayload = (entityDefinition, parse = val => val) => {
   return pipe(
     map(val => {
       const entityIsWrong = checkEntity(val);
-      console.log(entityIsWrong);
 
       if (entityIsWrong) {
         throw entityIsWrong;

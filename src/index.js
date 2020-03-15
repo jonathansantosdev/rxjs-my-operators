@@ -14,7 +14,7 @@ of({
   age: null
 })
   .pipe(
-    checkPayload(["id", "name|string", "age|number|string:notNull"]),
+    checkPayload(["id:notNull", "name", "age|number|string:notNull"]),
     catchError(console.error)
   )
   .subscribe(console.log);
