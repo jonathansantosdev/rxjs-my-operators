@@ -1,6 +1,6 @@
 import "./styles.css";
 import { of } from "rxjs";
-import { map } from "rxjs/operators";
+import { map, catchError } from "rxjs/operators";
 
 import { checkPayload } from "./operators";
 
@@ -13,5 +13,8 @@ of({
   name: "Jonathan",
   age: null
 })
-  .pipe(checkPayload(["id|number|string", "name|string", "age|number:notNull"]))
-  .subscribe();
+  .pipe(
+    checkPayload(["id", "name|string", "age|number|string:notNull"]),
+    catchError(console.error)
+  )
+  .subscribe(console.log);
